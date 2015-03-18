@@ -1,6 +1,7 @@
 package dk.cphbusiness.banking;
 
 import static org.hamcrest.CoreMatchers.is;
+import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Test;
@@ -32,6 +33,27 @@ public class AccountTest {
     assertFalse("should return false", account.isInternal());
     assertThat(account.getBank(), is(bank));
     assertThat(account.getCustomer(), is(customer));
+    }
+  
+  @Test
+  public void transferAmountTest() throws Exception {
+    final Bank bank = context.mock(Bank.class);
+    String sourceNumber = "#4713";
+    final String targetNumber = "#4714";
+    Account sourceAccount = new Account(bank, sourceNumber);
+    final Account targetAccount = new Account(bank, targetNumber);
+    int sourceBalance = sourceAccount.getBalance();
+    int targetBalance = targetAccount.getBalance();
+    int amount = 200;
+    
+    context.checking(new Expectations() {{
+      oneOf(bank).findAccount(targetNumber);
+      will(returnValue(targetAccount));
+      }});
+    
+    sourceAccount.transfer(targetNumber, amount);
+    assertThat(sourceAccount.getBalance(), is(sourceBalance - amount));
+    assertThat(targetAccount.getBalance(), is(targetBalance + amount));
     }
   
   }

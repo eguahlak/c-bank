@@ -4,6 +4,7 @@ public class Account {
   private Bank bank;
   private Customer customer;
   private String number;
+  private int balance = 0;
   
   public Account(Bank bank, String number) {
     this.bank = bank;
@@ -13,6 +14,12 @@ public class Account {
   public Account(Bank bank, Customer customer, String number) {
     this(bank, number);
     this.customer = customer;
+    }
+
+  public void transfer(String targetNumber, int amount) {
+    Account targetAccount = bank.findAccount(targetNumber);
+    this.balance -= amount;
+    targetAccount.balance += amount;
     }
   
   public boolean isInternal() {
@@ -28,7 +35,7 @@ public class Account {
     } 
   
   public int getBalance() {
-    return 0;
+    return balance;
     }
   
   public Customer getCustomer() {
