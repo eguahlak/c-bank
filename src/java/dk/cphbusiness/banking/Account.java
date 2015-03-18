@@ -2,6 +2,7 @@ package dk.cphbusiness.banking;
 
 public class Account {
   private Bank bank;
+  private Customer customer;
   private String number;
   
   public Account(Bank bank, String number) {
@@ -9,8 +10,13 @@ public class Account {
     this.number = number;
     }
   
+  public Account(Bank bank, Customer customer, String number) {
+    this(bank, number);
+    this.customer = customer;
+    }
+  
   public boolean isInternal() {
-    return true;
+    return customer == null;
     }
   
   public String getNumber() {
@@ -23,6 +29,10 @@ public class Account {
   
   public int getBalance() {
     return 0;
+    }
+  
+  public Customer getCustomer() {
+    return customer;
     }
   
   }
